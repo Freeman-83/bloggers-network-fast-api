@@ -2,10 +2,12 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import  Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from app.database import Model
+
+class Base(DeclarativeBase):
+    ...
 
 
-class User(Model):
+class User(Base):
 
     __tablename__ = 'users'
 

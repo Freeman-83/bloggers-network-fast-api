@@ -1,21 +1,19 @@
+import config
+
 import uvicorn
 
-import sys
-sys.path.append(".")
-
-from fastapi import FastAPI
-
-from pathlib import Path
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
 
 from users.routers import user_router
-from posts.routers import post_router
+from todo.routers import task_router
 
 
 app = FastAPI()
 
 
 app.include_router(user_router)
-app.include_router(post_router)
+app.include_router(task_router)
 
 
 if __name__ == '__main__':
