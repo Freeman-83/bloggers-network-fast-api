@@ -11,18 +11,17 @@ class TaskSchemaBase(BaseModel):
         
 
 
-# class CreateTaskSchema(TaskSchemaBase):
+class TaskSchemaCreate(TaskSchemaBase):
 
-#     ...
+    ...
 
 
-# class TaskSchema(TaskSchemaBase):
+class TaskSchema(TaskSchemaBase):
 
-#     id: int
-#     completed: bool = False
+    model_config = ConfigDict(from_attributes = True)
 
-#     class Config:
-#         from_attributes = True
+    id: int
+    completed: bool = False
 
     
 
