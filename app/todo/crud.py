@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 
 from todo.models import Task
-from todo.schemas import TaskSchemaBase, TaskSchemaCreate, TaskSchema
+from todo.schemas import TaskSchemaCreate
 
 
 def get_task_from_db(task_id, db: Session):

@@ -6,20 +6,21 @@ from sqlalchemy.orm import Session
 
 from database import engine
 
-import todo, users
+from todo import models as tasks_models
+from users import models as users_models
 
-from users.routers import user_router
 from todo.routers import task_router
+from users.routers import user_router
 
 
 app = FastAPI()
 
 
-app.include_router(user_router)
 app.include_router(task_router)
+app.include_router(user_router)
 
-todo.models.Base.metadata.create_all(bind=engine)
-users.models.Base.metadata.create_all(bind=engine)
+tasks_models.Base.metadata.create_all(bind=engine)
+users_models.Base.metadata.create_all(bind=engine)
 
 
 if __name__ == '__main__':

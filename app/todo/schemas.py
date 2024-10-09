@@ -1,27 +1,21 @@
 from pydantic import BaseModel, ConfigDict
 
 
-class TaskSchemaBase(BaseModel):
-
-    model_config = ConfigDict(from_attributes = True)
-
+class TaskBase(BaseModel):
     title: str
-    description: str
-
-        
+    description: str | None = None
 
 
-class TaskSchemaCreate(TaskSchemaBase):
+class TaskSchemaCreate(TaskBase):
+    pass
 
-    ...
 
-
-class TaskSchema(TaskSchemaBase):
-
-    model_config = ConfigDict(from_attributes = True)
-
+class TaskSchema(TaskBase):
     id: int
-    completed: bool = False
+    owner_id: int
+
+    class Config:
+        from_attributes = True
 
     
 

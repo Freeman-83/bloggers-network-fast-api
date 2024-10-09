@@ -1,13 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal, engine
 
-from todo.schemas import TaskSchema, TaskSchemaCreate
-from todo.models import Task
+from .schemas import TaskSchema, TaskSchemaCreate
+from .models import Task
 
-from todo.crud import get_task_from_db, create_task_to_db
+from .crud import get_task_from_db, create_task_to_db
 
 from app.database import get_db
 
@@ -20,7 +20,8 @@ def task_list():
 
 
 @task_router.post('/tasks', response_model=TaskSchema)
-def create_task(task: TaskSchemaCreate, db: Session = Depends(get_db)):
+def create_task(request: Request, task: TaskSchemaCreate, db: Session = Depends(get_db)):
+    task.model_dump().update({'owner_id': request.user.id})
     return create_task_to_db(db=db, task=task)
 
 
