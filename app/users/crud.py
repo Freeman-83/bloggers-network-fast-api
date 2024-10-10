@@ -10,6 +10,10 @@ def get_user_from_db(user_id, db: Session):
     return db.query(User).filter(User.id == user_id).first()
 
 
+def get_users_list(db: Session):
+    return db.query(User).all()
+
+
 def create_user_to_db(user: UserSchemaCreate, db: Session):
     user_db = User(**user.model_dump())
     db.add(user_db)
