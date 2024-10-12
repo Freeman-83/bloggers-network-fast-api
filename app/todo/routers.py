@@ -37,7 +37,7 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
     return task
 
 
-@task_router.put('/tasks/{task_id}')
+@task_router.patch('/tasks/{task_id}')
 def update_task(task_id):
     ...
 
