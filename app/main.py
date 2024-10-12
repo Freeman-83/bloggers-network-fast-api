@@ -2,7 +2,6 @@ import config
 import uvicorn
 
 from fastapi import FastAPI
-from sqlalchemy.orm import Session
 
 from database import engine
 

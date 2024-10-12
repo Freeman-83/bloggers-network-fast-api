@@ -1,16 +1,16 @@
 from pydantic import BaseModel, ConfigDict
 
 
-class TaskBase(BaseModel):
+class TaskSchemaBase(BaseModel):
     title: str
     description: str | None = None
 
 
-class TaskSchemaCreate(TaskBase):
+class CreateTaskSchema(TaskSchemaBase):
     pass
 
 
-class TaskSchema(TaskBase):
+class GetTaskSchema(TaskSchemaBase):
     id: int
     owner_id: int
 

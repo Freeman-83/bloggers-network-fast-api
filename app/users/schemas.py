@@ -1,20 +1,20 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 
-from app.todo.schemas import TaskSchema
+from app.todo.schemas import GetTaskSchema
 
 
-class UserBase(BaseModel):
-    email: str
+class UserSchemaBase(BaseModel):
+    email: EmailStr
 
 
-class UserSchemaCreate(UserBase):
+class CreateUserSchema(UserSchemaBase):
     password: str
 
 
-class UserSchema(UserBase):
+class GetUserSchema(UserSchemaBase):
     id: int
     is_active: bool
-    tasks: list[TaskSchema] = []
+    tasks: list[GetTaskSchema] = []
 
     class Config:
         from_attributes = True
