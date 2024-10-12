@@ -10,7 +10,7 @@ from app.database import get_db
 
 from users.crud import (get_user_from_db,
                         create_new_user,
-                        get_user_for_token,
+                        get_user_for_token_assignment,
                         get_users_list)
 
 from .utils import create_jwt_token
@@ -27,7 +27,7 @@ def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
 
 @user_router.post('/login')
 def login(user: CreateUserSchema, db: Session = Depends(get_db)):
-    current_user = get_user_for_token(user, db)
+    current_user = get_user_for_token_assignment(user, db)
     if current_user:
         token = create_jwt_token({"sub": user.email})
         current_user.is_active = True

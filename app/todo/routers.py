@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from .schemas import GetTaskSchema, CreateTaskSchema
 
-from .crud import get_task_from_db, create_task_to_db, get_tasks_list
+from .crud import get_task_from_db, create_new_task, get_tasks_list
 
 from app.users.utils import get_user_from_token
 
@@ -26,7 +26,7 @@ def create_task(request: Request,
                 current_user: str = Depends(get_user_from_token),
                 db: Session = Depends(get_db)):
     task.model_dump().update({'owner_id': current_user})
-    return create_task_to_db(db=db, task=task)
+    return create_new_task(db=db, task=task)
 
 
 @task_router.get('/tasks/{task_id}')

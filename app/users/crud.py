@@ -17,7 +17,7 @@ def create_new_user(user: CreateUserSchema, db: Session):
     db.refresh(user_db)
     return user_db
 
-def get_user_for_token(current_user, db: Session):
+def get_user_for_token_assignment(current_user, db: Session):
     return db.query(User).filter(
         User.email == current_user.email,
         User.password == current_user.password
