@@ -19,12 +19,6 @@ from .utils import create_jwt_token
 user_router = APIRouter()
 
 
-@user_router.post('/users', response_model=GetUserSchema)
-def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
-    user = create_new_user(user=user, db=db)
-    return user
-
-
 @user_router.post('/login')
 def login(user: CreateUserSchema, db: Session = Depends(get_db)):
     current_user = get_user_for_token_assignment(user, db)
@@ -42,6 +36,12 @@ def login(user: CreateUserSchema, db: Session = Depends(get_db)):
 @user_router.post('/logout')
 def logout(user: CreateUserSchema, db: Session = Depends(get_db)):
     ...
+
+
+@user_router.post('/users', response_model=GetUserSchema)
+def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
+    user = create_new_user(user=user, db=db)
+    return user
 
 
 @user_router.get('/users', response_model=list[GetUserSchema])
