@@ -27,7 +27,6 @@ def delete_jwt_token():
 def get_user_from_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, key=SECRET_KEY, algorithms=['HS256']) # декодируем токен
-        print(payload.get("sub"))
         return payload.get("sub") # тут мы идем в полезную нагрузку JWT-токена и возвращаем утверждение о юзере (subject); обычно там еще можно взять "iss" - issuer/эмитент, или "exp" - expiration time - время 'сгорания' и другое, что мы сами туда кладем
     except jwt.ExpiredSignatureError:
         raise HTTPException(

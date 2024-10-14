@@ -14,9 +14,9 @@ class Task(Base):
     title = Column(String, index=True)
     description = Column(String, index=True)
     is_completed = Column(Boolean, default=False)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey('users.id'))
 
-    owner = relationship("User", back_populates="tasks")
+    owner = relationship('User', back_populates='tasks')
 
 
 

@@ -22,3 +22,9 @@ def get_user_for_token_assignment(current_user, db: Session):
         User.email == current_user.email,
         User.password == current_user.password
     ).first()
+
+def get_user_for_tasks_create(current_user_email, db: Session):
+    user = db.query(User).filter(
+        User.email == current_user_email
+    ).first().id
+    return user
