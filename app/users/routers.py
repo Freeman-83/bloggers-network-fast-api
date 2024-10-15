@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from users.schemas import GetUserSchema, CreateUserSchema
 
-from app.database import get_db
+from app.utils import get_db
 
 from users.crud import (get_user_from_db,
                         create_new_user,

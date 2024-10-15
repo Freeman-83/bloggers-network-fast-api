@@ -2,15 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from sqlalchemy.orm import Session
 
+from app.utils import get_db
+
 from .schemas import GetTaskSchema, CreateTaskSchema
 
 from .crud import get_task_from_db, create_new_task, get_tasks_list
 
 from app.users.utils import get_user_from_token
 from app.users.crud import get_user_for_tasks_create
-
-
-from app.database import get_db
 
 
 task_router = APIRouter()
@@ -27,7 +26,6 @@ async def create_task(task: CreateTaskSchema,
                       current_user: str = Depends(get_user_from_token),
                       db: Session = Depends(get_db)):
     current_user_id = get_user_for_tasks_create(current_user, db)
-    print(current_user_id)
     task.model_dump().update({'owner_id': current_user_id})
     return create_new_task(task=task, db=db)
 
