@@ -12,6 +12,8 @@ from app.users.models import User
 
 from app.users.dependences import create_jwt_token
 
+from app.exceptions import CustomException, custom_exception_handler
+
 
 user_router = APIRouter()
 
