@@ -4,16 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from sqlalchemy.orm import Session
 
-from users.schemas import GetUserSchema, CreateUserSchema
+from app.users.schemas import GetUserSchema, CreateUserSchema
 
 from app.utils import get_db
 
-from users.crud import (get_user_from_db,
-                        create_new_user,
-                        get_user_for_token_assignment,
-                        get_users_list)
+from app.users.models import User
 
-from .utils import create_jwt_token
+from app.users.dependences import create_jwt_token
 
 
 user_router = APIRouter()
@@ -21,9 +18,13 @@ user_router = APIRouter()
 
 @user_router.post('/login')
 async def login(user: CreateUserSchema, db: Session = Depends(get_db)):
-    current_user = get_user_for_token_assignment(user, db)
+    current_user = db.query(User).filter(
+        User.email == user.email,
+        User.password == user.password
+    ).first()
+
     if current_user:
-        token = create_jwt_token({'sub': user.email})
+        token = create_jwt_token({'sub': current_user.email})
         current_user.is_active = True
         db.add(current_user)
         db.commit()
@@ -40,18 +41,22 @@ async def logout(user: CreateUserSchema, db: Session = Depends(get_db)):
 
 @user_router.post('/users', response_model=GetUserSchema)
 async def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
-    user = create_new_user(user=user, db=db)
-    return user
+    user_db = User(**user.model_dump())
+    db.add(user_db)
+    db.commit()
+    db.refresh(user_db)
+    return user_db
 
 
 @user_router.get('/users', response_model=list[GetUserSchema])
-async def users_list(db: Session = Depends(get_db)):
-    return get_users_list(db)
+async def users_list(db: Session = Depends(get_db)) -> list[User]:
+    users_list = db.query(User).all()
+    return users_list
 
 
 @user_router.get('/users/{user_id}', response_model=GetUserSchema)
-async def get_user(user_id: int, db: Session = Depends(get_db)):
-    user = get_user_from_db(user_id, db)
+async def get_user(user_id: int, db: Session = Depends(get_db)) -> User:
+    user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise HTTPException(status_code=404, detail='User not found')
     return user

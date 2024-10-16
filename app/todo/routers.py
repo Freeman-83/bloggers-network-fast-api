@@ -2,13 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from sqlalchemy.orm import Session
 
-from .schemas import GetTaskSchema, CreateTaskSchema
+from app.todo.models import Task
+from app.todo.schemas import GetTaskSchema, CreateTaskSchema
 
-from .crud import get_task_from_db, create_new_task, get_tasks_list
-
-from app.users.utils import get_user_from_token
-from app.users.crud import get_user_for_tasks_create
-
+from app.users.models import User
+from app.users.dependences import get_user_from_token
 
 from app.utils import get_db
 
@@ -19,22 +17,27 @@ task_router = APIRouter()
 @task_router.get('/tasks', response_model=list[GetTaskSchema])
 async def task_list(current_user: str = Depends(get_user_from_token),
                     db: Session = Depends(get_db)):
-    return get_tasks_list(db)
+    task_list = db.query(Task).all()
+    return task_list
 
 
 @task_router.post('/tasks', response_model=GetTaskSchema)
 async def create_task(task: CreateTaskSchema,
                       current_user: str = Depends(get_user_from_token),
                       db: Session = Depends(get_db)):
-    current_user_id = get_user_for_tasks_create(current_user, db)
-    print(current_user_id)
-    task.model_dump().update({'owner_id': current_user_id})
-    return create_new_task(task=task, db=db)
-
+    owner_db = db.query(User).filter(User.email == current_user).first()
+    task.owner_id = owner_db.id
+    task_db = Task(**task.model_dump())
+    db.add(task_db)
+    db.commit()
+    db.refresh(task_db)
+    return task_db
 
 @task_router.get('/tasks/{task_id}')
-async def get_task(task_id: int, db: Session = Depends(get_db)):
-    task = get_task_from_db(task_id, db)
+async def get_task(task_id: int,
+                   current_user: str = Depends(get_user_from_token),
+                   db: Session = Depends(get_db)):
+    task = db.query(Task).filter(Task.id == task_id).first()
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task

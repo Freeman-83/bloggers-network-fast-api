@@ -4,14 +4,10 @@ from pydantic import BaseModel, ConfigDict
 class TaskSchemaBase(BaseModel):
     title: str
     description: str | None = None
-    
-
-    class Config:
-        from_attributes = True
 
 
 class CreateTaskSchema(TaskSchemaBase):
-    pass
+    owner_id: int | None = None
 
 
 class GetTaskSchema(TaskSchemaBase):
@@ -20,6 +16,3 @@ class GetTaskSchema(TaskSchemaBase):
 
     class Config:
         from_attributes = True
-
-    
-

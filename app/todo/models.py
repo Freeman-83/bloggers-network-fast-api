@@ -1,4 +1,3 @@
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime, Boolean
 from sqlalchemy.orm import relationship
 
@@ -17,6 +16,3 @@ class Task(Base):
     owner_id = Column(Integer, ForeignKey('users.id'))
 
     owner = relationship('User', back_populates='tasks')
-
-
-
