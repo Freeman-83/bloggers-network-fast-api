@@ -27,17 +27,17 @@ def delete_jwt_token():
 def get_user_from_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, key=SECRET_KEY, algorithms=['HS256']) # декодируем токен
-        return payload.get("sub") 
+        return payload.get('sub') 
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired",
-            headers={"WWW-Authenticate": "Bearer"},
+            detail='Token has expired',
+            headers={'WWW-Authenticate': 'Bearer'},
         )
     except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
+            detail='Invalid token',
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 

@@ -39,7 +39,7 @@ async def get_task(task_id: int,
                    db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
+        raise HTTPException(status_code=404, detail='Task not found')
     return task
 
 
