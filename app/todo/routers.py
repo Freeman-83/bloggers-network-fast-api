@@ -30,8 +30,6 @@ async def create_task(task: CreateTaskSchema,
                       db: Session = Depends(get_db)):
     author_db = db.query(User).filter(User.email == current_user).first()
     task.author_id = author_db.id
-    # task.complete_date = date.strftime(task.complete_date, "%Y-%m-%d")
-    # task.complete_time = time.strftime(task.complete_time, '%H:%m')
     task_db = Task(**task.model_dump())
     db.add(task_db)
     db.commit()

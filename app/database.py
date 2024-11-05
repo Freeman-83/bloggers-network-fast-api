@@ -14,8 +14,3 @@ SessionLocal = sessionmaker(autoflush=True, bind=engine)
 
 Base = declarative_base()
 
-
-
-
-
-
