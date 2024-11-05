@@ -12,10 +12,10 @@ from app.users.models import User
 
 from app.users.dependences import create_jwt_token
 
-from app.exceptions import CustomException, custom_exception_handler
+from app.exceptions import LoginErrorException, custom_exception_handler
 
 
-user_router = APIRouter()
+user_router = APIRouter(prefix='/users')
 
 
 @user_router.post('/login')
@@ -41,7 +41,7 @@ async def logout(user: CreateUserSchema, db: Session = Depends(get_db)):
     ...
 
 
-@user_router.post('/users', response_model=GetUserSchema)
+@user_router.post('/', response_model=GetUserSchema)
 async def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
     user_db = User(**user.model_dump())
     db.add(user_db)
@@ -50,13 +50,13 @@ async def create_user(user: CreateUserSchema, db: Session = Depends(get_db)):
     return user_db
 
 
-@user_router.get('/users', response_model=list[GetUserSchema])
+@user_router.get('/', response_model=list[GetUserSchema])
 async def users_list(db: Session = Depends(get_db)) -> list[User]:
     users_list = db.query(User).all()
     return users_list
 
 
-@user_router.get('/users/{user_id}', response_model=GetUserSchema)
+@user_router.get('/{user_id}', response_model=GetUserSchema)
 async def get_user(user_id: int, db: Session = Depends(get_db)) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:

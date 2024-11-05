@@ -12,7 +12,7 @@ from app.todo.routers import task_router
 from app.users.routers import user_router
 
 
-app = FastAPI()
+app = FastAPI(root_path='/api')
 
 
 app.include_router(task_router)

@@ -10,8 +10,9 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
     is_active = Column(Boolean, default=False)
 
-    tasks = relationship('Task', back_populates='owner')
+    tasks = relationship('Task', back_populates='author')

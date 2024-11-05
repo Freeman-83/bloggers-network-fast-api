@@ -1,18 +1,22 @@
+from datetime import date, time
 from pydantic import BaseModel, ConfigDict
 
 
 class TaskSchemaBase(BaseModel):
     title: str
-    description: str | None = None
 
 
 class CreateTaskSchema(TaskSchemaBase):
-    owner_id: int | None = None
+    author_id: int | None = None
+    complete_date: date
+    complete_time: time
 
 
 class GetTaskSchema(TaskSchemaBase):
     id: int
-    owner_id: int
+    author_id: int
+    complete_date: date
+    complete_time: time
 
     class Config:
         from_attributes = True

@@ -4,6 +4,7 @@ from app.todo.schemas import GetTaskSchema
 
 
 class UserSchemaBase(BaseModel):
+    username: str
     email: EmailStr
 
 
